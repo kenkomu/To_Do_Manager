@@ -1,6 +1,6 @@
 # User_Sentence_Management
 
-The application will manage a list of users who send sentences to the system. Each sentence sent by a user will be converted to uppercase, and the total number of uppercase conversions will be tracked. Users can also query the system to retrieve the list of users who have submitted sentences and the total number of sentences converted to uppercase.
+The application will manage user-submitted sentences, convert them to uppercase, track the total conversions, and allow users to query the list of submitters and the total conversions made.
 
 # Installation instructions
 [](https://docs.cartesi.io/cartesi-rollups/1.3/development/installation/)
