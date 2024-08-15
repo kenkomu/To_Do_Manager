@@ -1,4 +1,5 @@
-# User_Sentence_Management
+# Todo List Manager
+
 
 The application will allow users to add tasks, mark them as completed, and view their list of tasks. I am using Cartesi, and the results can be fetched using the GraphQL interface.
 
