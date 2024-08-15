@@ -11,12 +11,7 @@ function str2hex(payload) {
   return ethers.hexlify(ethers.toUtf8Bytes(payload));
 }
 
-function isNumeric(num) {
-  return !isNaN(num);
-}
-
-let users = [];
-let toUpperTotal = 0;
+let tasks = {};
 
 async function handle_advance(data) {
   console.log("Received advance request data " + JSON.stringify(data));
@@ -25,29 +20,38 @@ async function handle_advance(data) {
   const sender = metadata["msg_sender"];
   const payload = data["payload"];
 
-  let sentence = hex2str(payload);
-  if (isNumeric(sentence)) {
-    const report_req = await fetch(rollup_server + "/report", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ payload: str2hex("sentence is not in text format") }),
-    });
+  let action = hex2str(payload).split(' ');
+  let command = action[0].toLowerCase();
+  let task = action.slice(1).join(' ');
 
-    return "reject";
+  let response = '';
+
+  if (command === 'add') {
+    if (!tasks[sender]) tasks[sender] = [];
+    tasks[sender].push({ task, completed: false });
+    response = `Task added: ${task}`;
+  } else if (command === 'complete') {
+    if (tasks[sender]) {
+      let taskIndex = tasks[sender].findIndex(t => t.task === task);
+      if (taskIndex !== -1) {
+        tasks[sender][taskIndex].completed = true;
+        response = `Task completed: ${task}`;
+      } else {
+        response = `Task not found: ${task}`;
+      }
+    } else {
+      response = `No tasks found for sender.`;
+    }
+  } else {
+    response = 'Invalid command.';
   }
 
-  users.push(sender);
-  toUpperTotal += 1;
-
-  sentence = sentence.toUpperCase();
   const notice_req = await fetch(rollup_server + "/notice", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ payload: str2hex(sentence) }),
+    body: JSON.stringify({ payload: str2hex(response) }),
   });
 
   return "accept";
@@ -61,9 +65,7 @@ async function handle_inspect(data) {
 
   let responseObject;
   if (route === "list") {
-    responseObject = JSON.stringify({ users });
-  } else if (route === "total") {
-    responseObject = JSON.stringify({ toUpperTotal });
+    responseObject = JSON.stringify(tasks);
   } else {
     responseObject = "route not implemented";
   }

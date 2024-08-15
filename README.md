@@ -1,11 +1,18 @@
 # User_Sentence_Management
 
-The application will manage user-submitted sentences, convert them to uppercase, track the total conversions, and allow users to query the list of submitters and the total conversions made.
+The application will allow users to add tasks, mark them as completed, and view their list of tasks. I am using Cartesi, and the results can be fetched using the GraphQL interface.
+
+Features:
+
+1. Add Task: Users can add a task to their todo list.
+2. Complete Task: Users can mark a task as completed.
+3. List Tasks: Users can view all tasks, with an indication of whether they are completed or not.
+
 
 # Installation instructions
 ([]https://docs.cartesi.io/cartesi-rollups/1.3/development/installation/)
 
-# Installation instructions
+# Steps
 1. Clone the repository
 2. Run cd User_Sentence_Management
 3. Run cartesi build
